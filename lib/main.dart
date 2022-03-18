@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '/constants/constants_values.dart';
 import '/data/providers/app_state_manager.dart';
@@ -50,11 +51,11 @@ class _MyAppState extends State<MyApp> {
         postManager: _detailsManager,
         connectUsManager: _connectUsManager);
     super.initState();
-  //   messaging.getToken().then((value) {
-  //     print("EEEEEEEEEEEEEEEEEEEEEEEEEEE ${value} EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-  //   });
+    messaging.getToken().then((value) {
+      print("EEEEEEEEEEEEEEEEEEEEEEEEEEE ${value} EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+    });
   }
-  // FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   @override
   Widget build(BuildContext context) {
