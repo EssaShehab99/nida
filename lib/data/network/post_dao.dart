@@ -5,10 +5,10 @@ class PostDao extends ChangeNotifier{
   final CollectionReference collection =
   FirebaseFirestore.instance.collection('posts');
 
-  void savePost(Post post) {
-    collection.add(post.toJson());
+  Future<void>  savePost(Post post) async{
+    return collection.add(post.toJson()).then((value) => null);
   }
   Stream<QuerySnapshot> getPostsStream() {
-    return collection.snapshots();
+    return collection.orderBy("date",descending: true).snapshots();
   }
 }

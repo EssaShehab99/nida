@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nida/modules/navigation/custom_transition_delegate.dart';
+import '/modules/navigation/custom_transition_delegate.dart';
 import '/modules/Screens/connect_us.dart';
 import '/modules/Screens/post_details.dart';
 
