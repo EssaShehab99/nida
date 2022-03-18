@@ -51,11 +51,11 @@ class _MyAppState extends State<MyApp> {
         postManager: _detailsManager,
         connectUsManager: _connectUsManager);
     super.initState();
-    messaging.getToken().then((value) {
-      print("EEEEEEEEEEEEEEEEEEEEEEEEEEE ${value} EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-    });
+  //   messaging.getToken().then((value) {
+  //     print("EEEEEEEEEEEEEEEEEEEEEEEEEEE ${value} EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+  //   });
   }
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   @override
   Widget build(BuildContext context) {
