@@ -1,12 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:nida/data/models/post.dart';
-import 'package:nida/data/network/post_dao.dart';
-import 'package:nida/data/setting/profile_pages.dart';
-import 'package:nida/shared/components/custom_button.dart';
+import '/data/models/help.dart';
+import '/data/models/post.dart';
+import '/data/network/help_dao.dart';
+import '/data/network/post_dao.dart';
+import '/data/setting/app_pages.dart';
+import '/shared/components/custom_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/constants_values.dart';
+import '../../data/providers/connect_us_manager.dart';
 import '../../styles/colors.dart';
 
 class ConnectUs extends StatefulWidget {
@@ -51,7 +54,8 @@ class _ConnectUsState extends State<ConnectUs> {
 
   @override
   Widget build(BuildContext context) {
-    final postDao = Provider.of<PostDao>(context, listen: false);
+    final helpDao = Provider.of<HelpDao>(context, listen: false);
+    final connectUsManager = Provider.of<ConnectUsManager>(context, listen: false);
 
     return SafeArea(
       child: Scaffold(
@@ -132,10 +136,14 @@ class _ConnectUsState extends State<ConnectUs> {
                         text: "send".tr(),
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            postDao.savePost(Post(id: null, title: subjectController.text, details: detailsController.text));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
+                            if(!connectUsManager.didHanging) {
+                              helpDao.saveHelp(Help(id: null, title: subjectController.text, details: detailsController.text, phone: phoneController.text)).whenComplete(() {
+                                snackBarMessage(context,"success".tr(),AppColors.green);
+                                connectUsManager.handle();
+                              },);
+                            }else {
+                              snackBarMessage(context,"await".tr(),AppColors.primary);
+                            }
                           }
                         },
                       ),
@@ -148,6 +156,12 @@ class _ConnectUsState extends State<ConnectUs> {
         ),
       ),
     );
+  }
+
+  void snackBarMessage(BuildContext context,String text,Color? color) {
+     ScaffoldMessenger.of(context).showSnackBar(
+     SnackBar(content: Text(text),backgroundColor: color),
+                                );
   }
 
   TextFormField buildTextFormField(

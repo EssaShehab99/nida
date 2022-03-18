@@ -1,20 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nida/constants/constants_images.dart';
-import 'package:nida/constants/constants_values.dart';
-import 'package:nida/data/network/post_dao.dart';
-import 'package:nida/data/providers/connect_us_manager.dart';
-import 'package:nida/data/providers/post_manager.dart';
-import 'package:nida/shared/components/card_button.dart';
-import 'package:nida/shared/components/custom_dialog.dart';
-import 'package:nida/styles/colors.dart';
+import '/constants/constants_images.dart';
+import '/constants/constants_values.dart';
+import '/data/network/post_dao.dart';
+import '/data/providers/connect_us_manager.dart';
+import '/data/providers/post_manager.dart';
+import '/shared/components/card_button.dart';
+import '/shared/components/custom_dialog.dart';
+import '/styles/colors.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/models/post.dart';
-import '../../data/setting/profile_pages.dart';
+import '../../data/setting/app_pages.dart';
 import '../../shared/icons/app_icons.dart';
 
 class Home extends StatelessWidget {
@@ -28,30 +27,7 @@ class Home extends StatelessWidget {
   }
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  final List<String> drawerItems = ["about".tr(), "connect-us".tr()];
-  final List<Post> textList = [
-    Post(
-        id: "1",
-        title: "title",
-        details:
-            "ما زلت على أملي القديم؛ أنني وفي يوم ما سأجد ما بحثت عنه طوال عمري، سأعثر على ما ينقصني، سأصنع واقعي الذي أستحقه أو ربما تكتمل روحي، ربما تهدأ أفكاري أو ربما أستطيع تقبل هزائمي القديمة"),
-    Post(
-        id: "2",
-        title: "title",
-        details:
-            "ما زلت على أملي القديم؛ أنني وفي يوم ما سأجد ما بحثت عنه طوال عمري، سأعثر على ما ينقصني، سأصنع واقعي الذي أستحقه أو ربما تكتمل روحي، ربما تهدأ أفكاري أو ربما أستطيع تقبل هزائمي القديمة"),
-    Post(
-        id: "3",
-        title: "title",
-        details:
-            "ما زلت على أملي القديم؛ أنني وفي يوم ما سأجد ما بحثت عنه طوال عمري، سأعثر على ما ينقصني، سأصنع واقعي الذي أستحقه أو ربما تكتمل روحي، ربما تهدأ أفكاري أو ربما أستطيع تقبل هزائمي القديمة"),
-    Post(
-        id: "4",
-        title: "title",
-        details:
-            "ما زلت على أملي القديم؛ أنني وفي يوم ما سأجد ما بحثت عنه طوال عمري، سأعثر على ما ينقصني، سأصنع واقعي الذي أستحقه أو ربما تكتمل روحي، ربما تهدأ أفكاري أو ربما أستطيع تقبل هزائمي القديمة"),
-  ];
-
+  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey<RefreshIndicatorState>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -98,14 +74,20 @@ class Home extends StatelessWidget {
               ),
             ),
             Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: Provider.of<PostDao>(context).getPostsStream(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(child: LinearProgressIndicator());
-                    }
-                    return _buildList(context, snapshot.data!.docs);
+                child: RefreshIndicator(
+                  key: refreshKey,
+                  onRefresh: () async{
+
                   },
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: Provider.of<PostDao>(context).getPostsStream(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      return _buildList(snapshot.data!.docs);
+                    },
+                  ),
                 ))
           ],
         ),
@@ -140,12 +122,12 @@ class Home extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          for (var item in drawerItems)
+                          for (var item in ConstantsValue.drawerItems)
                             Flexible(
                               child: InkWell(
                                 onTap: () {
                                   Navigator.of(context).pop();
-                                  if (drawerItems.indexOf(item) == 0) {
+                                  if (ConstantsValue.drawerItems.indexOf(item) == 0) {
                                     showDialog(
                                         context: context,
                                         builder: (ctx) => CustomDialog(
@@ -216,13 +198,14 @@ class Home extends StatelessWidget {
       ),
     );
   }
-  Widget _buildList(BuildContext context, List<DocumentSnapshot>? snapshot) {
-    return ListView(
+  Widget _buildList(List<DocumentSnapshot>? snapshot) {
+    return ListView.builder(
+
       controller: _scrollController,
-      physics: const BouncingScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics (),
       padding: const EdgeInsets.only(top: 20.0),
-      // 2
-      children: snapshot!.map((data) => _buildListItem(context, data)).toList(),
+      itemCount: snapshot?.length,
+     itemBuilder:  (ctx,index)=>_buildListItem(ctx, snapshot![index]),
     );
   }
 

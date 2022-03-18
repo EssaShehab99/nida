@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:nida/shared/components/custom_button.dart';
+import '/shared/components/custom_button.dart';
 
 import '../../constants/constants_values.dart';
 import '../../styles/colors.dart';
@@ -30,7 +30,7 @@ final String? details;
           )),
           Flexible(child: Container(
             padding: EdgeInsets.all(ConstantsValue.padding),
-            height: 300,decoration: BoxDecoration(
+            height: 250,decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(ConstantsValue.radius))
           ),

@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nida/modules/Screens/connect_us.dart';
-import 'package:nida/modules/Screens/post_details.dart';
+import 'package:nida/modules/navigation/custom_transition_delegate.dart';
+import '/modules/Screens/connect_us.dart';
+import '/modules/Screens/post_details.dart';
 
 import '../../data/providers/app_state_manager.dart';
 import '../../data/providers/connect_us_manager.dart';
 import '../../data/providers/post_manager.dart';
 import '../../data/providers/home_manager.dart';
-import '../../data/setting/profile_pages.dart';
+import '../../data/setting/app_pages.dart';
 import '../Screens/home.dart';
-import '../Screens/splash_screen.dart';
 import 'app_link.dart';
 
 
@@ -47,16 +47,14 @@ class AppRoute extends RouterDelegate<AppLink>
     return Navigator(
       key: navigatorKey,
       onPopPage: _handlePopPage,
+      transitionDelegate: CustomTransitionDelegate(),
       pages: [
-        if (!appStateManager.isInitialized) ...[
-          SplashScreen.page(),
-        ] else ...[
+       ...[
           Home.page(),
           if(postManager.didSelectedPage)
             PostDetails.page(postManager.post!)
           else if(connectUsManager.didSelectedPage)
             ConnectUs.page()
-
         ]
       ],
     );

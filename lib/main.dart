@@ -1,18 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:nida/constants/constants_values.dart';
-import 'package:nida/data/providers/app_state_manager.dart';
-import 'package:nida/data/providers/connect_us_manager.dart';
-import 'package:nida/data/providers/post_manager.dart';
-import 'package:nida/modules/Screens/connect_us.dart';
-import 'package:nida/styles/colors.dart';
-import 'package:nida/styles/theme.dart';
+import '/constants/constants_values.dart';
+import '/data/providers/app_state_manager.dart';
+import '/data/providers/connect_us_manager.dart';
+import '/data/providers/post_manager.dart';
+import '/styles/theme.dart';
 import 'package:provider/provider.dart';
 
+import 'data/network/help_dao.dart';
 import 'data/network/post_dao.dart';
 import 'data/providers/home_manager.dart';
-import 'modules/Screens/home.dart';
 import 'modules/navigation/app_route.dart';
 import 'modules/navigation/app_route_parser.dart';
 
@@ -20,6 +18,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ar', 'YE')],
       path: 'assets/translations',
@@ -51,7 +50,11 @@ class _MyAppState extends State<MyApp> {
         postManager: _detailsManager,
         connectUsManager: _connectUsManager);
     super.initState();
+  //   messaging.getToken().then((value) {
+  //     print("EEEEEEEEEEEEEEEEEEEEEEEEEEE ${value} EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+  //   });
   }
+  // FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => _detailsManager,),
         ChangeNotifierProvider(create: (context) => _connectUsManager,),
         ChangeNotifierProvider(create: (context) => PostDao(),),
+        ChangeNotifierProvider(create: (context) => HelpDao(),),
       ],
       child: Consumer<AppStateManager>(
         builder:(context, value, child){

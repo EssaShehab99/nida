@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nida/data/models/post.dart';
+import '/data/models/post.dart';
 
 class PostManager extends ChangeNotifier{
   bool _didSelectedPage = false;

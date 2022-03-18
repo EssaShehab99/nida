@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nida/constants/constants_values.dart';
-import 'package:nida/data/models/post.dart';
-import 'package:nida/data/providers/post_manager.dart';
-import 'package:nida/data/setting/profile_pages.dart';
-import 'package:nida/styles/colors.dart';
+import '/constants/constants_values.dart';
+import '/data/models/post.dart';
+import '/data/setting/app_pages.dart';
+import '/styles/colors.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PostDetails extends StatelessWidget {
   const PostDetails({Key? key, required this.post}) : super(key: key);

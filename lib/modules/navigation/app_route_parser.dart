@@ -15,4 +15,5 @@ class AppRouteParser extends RouteInformationParser<AppLink> {
     final location = appLink.toLocating();
     return RouteInformation(location: location);
   }
+
 }
