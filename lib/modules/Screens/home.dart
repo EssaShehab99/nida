@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nida/data/network/token_dao.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import '/constants/constants_images.dart';
 import '/constants/constants_values.dart';
 import '/data/network/post_dao.dart';
@@ -27,7 +29,8 @@ class Home extends StatelessWidget {
   }
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey<RefreshIndicatorState>();
+  final  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

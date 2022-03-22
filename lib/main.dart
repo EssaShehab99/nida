@@ -12,10 +12,11 @@ import 'package:provider/provider.dart';
 
 import 'data/network/help_dao.dart';
 import 'data/network/post_dao.dart';
+import 'data/network/token_dao.dart';
 import 'data/providers/home_manager.dart';
 import 'modules/navigation/app_route.dart';
 import 'modules/navigation/app_route_parser.dart';
-//String OneSignal_App_ID=12205d7a-4f7a-48b0-a44c-ade73e73a3a5;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -38,40 +39,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _appStateManager = AppStateManager();
+  final _appStateManager = AppStateManager()..initial();
   final _homeManager = HomeManager();
   final _detailsManager = PostManager();
   final _connectUsManager = ConnectUsManager();
   final routeParser = AppRouteParser();
   late AppRoute _appRoute;
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  // void configureCallbacks() {
-  //   FirebaseMessaging.onMessage.listen((event) {
-  //     print(
-  //         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-  //   });
-  //
-  //   FirebaseMessaging.onMessageOpenedApp.listen((event) {
-  //     print(
-  //         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-  //   });
-  //
-  //   FirebaseMessaging.onBackgroundMessage((message) {
-  //     print(
-  //         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-  //
-  //     return Future.value();
-  //   });
-  // }
-  //
-  // Future<void> subscribeToEvent() async {
-  //   messaging.subscribeToTopic('Events');
-  //
-  //   String? newToken = await messaging.getToken();
-  //   print('--- $newToken ---');
-  //
-  // }
 
   @override
   void initState() {
@@ -81,44 +55,47 @@ class _MyAppState extends State<MyApp> {
         postManager: _detailsManager,
         connectUsManager: _connectUsManager);
     super.initState();
-    // configureCallbacks();
-    // subscribeToEvent();
-OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.none);
-OneSignal.shared.setAppId("12205d7a-4f7a-48b0-a44c-ade73e73a3a5");
-    getToken();
-      }
-getToken()async{
-  final status = await OneSignal.shared.getDeviceState();
-  final String? osUserID = status?.userId;
-  print("fffffffffffffffffffffffffffffffffff ${osUserID} fffffffffffffffffffffffffffffffffffffffffffff");
+    OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.none);
+    OneSignal.shared.setAppId("12205d7a-4f7a-48b0-a44c-ade73e73a3a5");
+  }
 
-}
   @override
   Widget build(BuildContext context) {
     context.setLocale(const Locale('ar', 'YE'));
     ConstantsValue(context);
+
+    setToken(BuildContext context) async {
+      try {
+        final status = await OneSignal.shared.getDeviceState();
+        String? osUserID = status?.userId;
+        final provider = Provider.of<TokenDao>(context, listen: false);
+        if (osUserID != null) {
+          provider.isExist(osUserID).then((value) {
+            if (!value) {
+              Provider.of<AppStateManager>(context, listen: false).setToken(osUserID);
+              provider.saveToken(osUserID);
+            }
+          });
+        }
+      } catch (e) {}
+    }
+
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => _appStateManager,
-        ),
-        ChangeNotifierProvider(
-          create: (context) => _homeManager,
-        ),
-        ChangeNotifierProvider(
-          create: (context) => _detailsManager,
-        ),
-        ChangeNotifierProvider(
-          create: (context) => _connectUsManager,
-        ),
-        ChangeNotifierProvider(
-          create: (context) => PostDao(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => HelpDao(),
-        ),
+        ChangeNotifierProvider(create: (context) => _appStateManager),
+        ChangeNotifierProvider(create: (context) => _homeManager),
+        ChangeNotifierProvider(create: (context) => _detailsManager),
+        ChangeNotifierProvider(create: (context) => _connectUsManager),
+        ChangeNotifierProvider(create: (context) => PostDao()),
+        ChangeNotifierProvider(create: (context) => HelpDao()),
+        ChangeNotifierProvider(create: (context) => TokenDao()),
       ],
       child: Consumer<AppStateManager>(builder: (context, value, child) {
+        value.initial().whenComplete(() {
+          if (value.token == null) {
+            setToken(context);
+          }
+        });
         return MaterialApp.router(
           title: 'Nida App',
           routeInformationParser: routeParser,
