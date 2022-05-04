@@ -55,8 +55,26 @@ class _MyAppState extends State<MyApp> {
         postManager: _detailsManager,
         connectUsManager: _connectUsManager);
     super.initState();
-    OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.none);
-    OneSignal.shared.setAppId("12205d7a-4f7a-48b0-a44c-ade73e73a3a5");
+    initPlatformState();
+  }
+  static final String oneSignalAppId = "12205d7a-4f7a-48b0-a44c-ade73e73a3a5";
+  Future<void> initPlatformState() async {
+    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    OneSignal.shared.setAppId(oneSignalAppId);
+    OneSignal.shared.sendTag("key", "value");
+
+    OneSignal.shared.sendTag("key", "value").then((response) {
+      print("Successfully sent tags with response: $response");
+    }).catchError((error) {
+      print("Encountered an error sending tags: $error");
+    });
+
+    OneSignal.shared
+        .promptUserForPushNotificationPermission()
+        .then((accepted) {
+      print("Accepted permission: $accepted");
+
+    });
   }
 
   @override
