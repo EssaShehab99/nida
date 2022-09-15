@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:502605725562:android:82471ecfc5d8b7350e20c3",
+        "mobilesdk_app_id": "1:502605725562:android:503728db75fcab300e20c3",
         "android_client_info": {
-          "package_name": "com.essashehab99.nida"
+          "package_name": "com.essashehab99.nida2"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "502605725562-upf7cf4tba88m2cv28lqknfpsdlqvgj5.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.essashehab99.nida",
-            "certificate_hash": "fb9de2cfe263b58a9c58d1b528dca856981d32e9"
-          }
-        },
         {
           "client_id": "502605725562-8a97neur76hds4t5baaeh0sfgtv5muv8.apps.googleusercontent.com",
           "client_type": 3
@@ -44,17 +36,17 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:502605725562:android:2cdc8ac2da6762090e20c3",
+        "mobilesdk_app_id": "1:502605725562:android:774877b3904124350e20c3",
         "android_client_info": {
-          "package_name": "com.example.nida_manager"
+          "package_name": "com.essashehab99.nida_manager"
         }
       },
       "oauth_client": [
         {
-          "client_id": "502605725562-8quf45iu2eqkjgu1pvqs1dgn4915326e.apps.googleusercontent.com",
+          "client_id": "502605725562-ooi85lggtjr7e76ckvtj9r84okmvtaj6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.nida_manager",
+            "package_name": "com.essashehab99.nida_manager",
             "certificate_hash": "fb9de2cfe263b58a9c58d1b528dca856981d32e9"
           }
         },

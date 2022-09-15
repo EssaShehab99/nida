@@ -61,7 +61,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.essashehab99.nida"
+        applicationId "com.essashehab99.nida2"
         minSdkVersion 23
         compileSdkVersion 31
         targetSdkVersion 31
